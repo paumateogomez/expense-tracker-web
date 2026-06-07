@@ -34,12 +34,24 @@ async function loadTransactions() {
     container.innerHTML = "";
 
     transactions.forEach(function (transaction) {
-        const transactionElement = document.createElement("p");
+    const transactionElement = document.createElement("p");
 
-        transactionElement.textContent =
-            `${transaction.amount} euros | ${transaction.category} | ${transaction.type}`;
+    transactionElement.textContent =
+        `${transaction.amount} euros | ${transaction.category} | ${transaction.type} `;
 
-        container.appendChild(transactionElement);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+
+    deleteButton.addEventListener("click", async function () {
+        await fetch(`http://127.0.0.1:8000/transactions/${transaction.id}`, {
+            method: "DELETE"
+        });
+
+        loadTransactions();
+    });
+
+    transactionElement.appendChild(deleteButton);
+    container.appendChild(transactionElement);
     });
 }
 
