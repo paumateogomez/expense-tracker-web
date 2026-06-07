@@ -23,6 +23,7 @@ button.addEventListener("click", async function () {
 
     console.log(data);
     loadTransactions();
+    loadStatistics();   
 });
 
 async function loadTransactions() {
@@ -48,11 +49,27 @@ async function loadTransactions() {
         });
 
         loadTransactions();
+        loadStatistics();
     });
 
     transactionElement.appendChild(deleteButton);
     container.appendChild(transactionElement);
     });
 }
+async function loadStatistics() {
+    const response = await fetch("http://127.0.0.1:8000/statistics");
+
+    const statistics = await response.json();
+
+    document.getElementById("balance").textContent =
+        `Balance: ${statistics.balance}€`;
+
+    document.getElementById("income").textContent =
+        `Income: ${statistics.income}€`;
+
+    document.getElementById("expenses").textContent =
+        `Expenses: ${statistics.expenses}€`;
+}
 
 loadTransactions();
+loadStatistics();
